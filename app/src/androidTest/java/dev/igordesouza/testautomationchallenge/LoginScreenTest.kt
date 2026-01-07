@@ -27,6 +27,7 @@ class LoginScreenTest {
     }
 
     /**
+     * Task 4
      * What you test at unit vs UI level.
      * At Unit level we test the classes that are the core of the code.
      * They can or cannot be dependant of the specific platform(Android/iOS)
