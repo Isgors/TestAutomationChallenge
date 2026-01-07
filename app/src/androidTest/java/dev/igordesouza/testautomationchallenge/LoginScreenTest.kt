@@ -1,13 +1,16 @@
 package dev.igordesouza.testautomationchallenge
 
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -17,12 +20,32 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class LoginScreenTest {
 
+    //If we can change production code
+    //----------------Production code(eg Viewmodel)--------------------
+    fun login(username: String, password: String) {
+        viewModelScope.launch {
+            LoginIdlingResource.track {
+                repository.login(username, password)
+            }
+        }
+    }
+
+
+    //---------------Test code---------------------------
+    @get:Rule
+    val idlingRule = BaseIdlingTestRule(
+        LoginIdlingResource.resource
+    )
 
     @Test
     fun invalidLoginShowsError(){
         onView(withId(R.id.username)).perform(typeText("bad"))
         onView(withId(R.id.password)).perform(typeText("creds"))
         onView(withId(R.id.login)).perform(click())
+
+        //Can change production code
+        onView(withId(R.id.error)).check(matches(isDisplayed()))
+        //Can't change production code
         onView(withId(R.id.error)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
 
