@@ -4,6 +4,9 @@ import org.junit.Test
 
 import org.junit.Assert.*
 
+/**
+ * Test class for Task 1 and 2
+ */
 class LoginValidatorTest {
 
     //Improvements: readability, add BDD DSL
